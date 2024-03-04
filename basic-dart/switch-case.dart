@@ -1,5 +1,5 @@
 void main() {
-  int day = 10;
+  int day = 1;
 
   // if (day == 1) {
   //   print('Saturday');
@@ -23,25 +23,18 @@ void main() {
   switch (day) {
     case 1:
       print('Saturday');
-      break;
     case 2:
       print('Sunday');
-      break;
     case 3:
       print('Monday');
-      break;
     case 4:
       print('Tuesday');
-      break;
     case 5:
       print('Wednesday');
-      break;
     case 6:
       print('Thursday');
-      break;
     case 7:
       print('Friday');
-      break;
     default:
       print('Invalid value');
   }

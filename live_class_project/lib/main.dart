@@ -1,13 +1,7 @@
-import 'package:flutter/foundation.dart';
-import 'package:device_preview/device_preview.dart';
-
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(DevicePreview(
-    enabled: kDebugMode,
-    builder: (context) => const MyApp(), // Wrap your app
-  ),);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,69 +10,107 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      home: const Home(),
-      theme: ThemeData(),
+      initialRoute: '/',
+      routes: {
+        '/' : (context) => const HomeScreen(),
+        '/settings' : (context) => const SettingsScreen(),
+        '/profile' : (context) => const ProfileScreen(),
+      },
     );
   }
 }
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
         title: const Text('Home'),
       ),
-      body: Column(
-        children: [
-          // Flexible(
-          //   fit: FlexFit.tight,
-          //   flex: 2,
-          //   child: Container(
-          //     width: 100,
-          //     color: Colors.red,
-          //   ),
-          // ),
-          // Expanded(
-          //   flex: 2,
-          //   child: Container(
-          //     width: 100,
-          //     color: Colors.yellow,
-          //   ),
-          // ),
-          // Expanded(
-          //   flex: 5,
-          //   child: Container(
-          //     width: 100,
-          //     height: 100,
-          //     color: Colors.green,
-          //   ),
-          // ),
-          // SizedBox(
-          //   width: MediaQuery.sizeOf(context).width,
-          //   height: 500,
-          //   child: FractionallySizedBox(
-          //     heightFactor: 0.9,
-          //     widthFactor: 0.8,
-          //     child: Container(
-          //       color: Colors.red,
-          //     ),
-          //   ),
-          // )
-          // 1:2
-          AspectRatio(aspectRatio: 16/5, child: Container(color: Colors.red,),)
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/settings');
+              },
+              child: const Text('Settings'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/profile',
+                    arguments: 45);
+              },
+              child: const Text('Profile'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as int;
+    print(args);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/', (route) => false);
+              },
+              child: const Text('Home'),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Settings'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Profile'),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Home'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 

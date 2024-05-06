@@ -2,37 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:live_class_project/home_screen.dart';
 
 void main() {
-  runApp(const CalculatorApp());
+  runApp(const WaterTrackerApp());
 }
 
-class CalculatorApp extends StatelessWidget {
-  const CalculatorApp({super.key});
+class WaterTrackerApp extends StatelessWidget {
+  const WaterTrackerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Calculator',
+      title: 'Water Tracker',
       home: const HomeScreen(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
           foregroundColor: Colors.white
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue)
-            ),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue)
-            ),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue)
-            ),
-            errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red)
-            ),
-            contentPadding: EdgeInsets.all(16)
-        ),
+        )
       ),
     );
   }

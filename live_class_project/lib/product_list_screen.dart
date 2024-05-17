@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:live_class_project/add_product_screen.dart';
+import 'package:live_class_project/product.dart';
 import 'package:live_class_project/update_product_screen.dart';
 
 class ProductListScreen extends StatefulWidget {
@@ -10,18 +14,33 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
+  bool _getProductListInProgress = false;
+  List<Product> productList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getProductList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product list'),
       ),
-      body: ListView.separated(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buildProductItem();
-        },
-        separatorBuilder: (_, __) => const Divider(),
+      body: Visibility(
+        visible: _getProductListInProgress == false,
+        replacement: const Center(
+          child: CircularProgressIndicator(),
+        ),
+        child: ListView.separated(
+          itemCount: productList.length,
+          itemBuilder: (context, index) {
+            return _buildProductItem(productList[index]); // n(1)
+          },
+          separatorBuilder: (_, __) => const Divider(),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -35,20 +54,59 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
-  Widget _buildProductItem() {
+  Future<void> _getProductList() async {
+    _getProductListInProgress = true;
+    setState(() {});
+    productList.clear();
+    const String productListUrl = 'https://crud.teamrabbil.com/api/v1/ReadProduct';
+    Uri uri = Uri.parse(productListUrl);
+    Response response = await get(uri);
+    print(response.statusCode);
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      // data decode
+      final decodedData = jsonDecode(response.body);
+      // get the list
+      final jsonProductList = decodedData['data'];
+      // loop over the list
+      for (Map<String, dynamic> p in jsonProductList) {
+        Product product = Product(
+          id: p['_id'] ?? '',
+          productName: p['ProductName'] ?? 'Unknown',
+          productCode: p['ProductCode'] ?? '',
+          image: p['Img'] ?? '',
+          unitPrice: p['UnitPrice'] ?? '',
+          quantity: p['Qty'] ?? '',
+          totalPrice: p['TotalPrice'] ?? '',
+        );
+
+        productList.add(product);
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Get product list failed! Try again.')),
+      );
+    }
+
+    _getProductListInProgress = false;
+    setState(() {});
+  }
+
+  Widget _buildProductItem(Product product) {
     return ListTile(
       // leading: Image.network(
-      //   'https://static.nike.com/a/images/t_default/3d0dd096-7c9d-495c-bf41-adbb0b9ad737/sabrina-1-team-basketball-shoes-bVkR71.png',
+      //   product.image,
       //   height: 60,
       //   width: 60,
       // ),
-      title: const Text('Product name'),
-      subtitle: const Wrap(
+      title: Text(product.productName),
+      subtitle: Wrap(
         spacing: 16,
         children: [
-          Text('Unit Price: 100'),
-          Text('Quantity : 100'),
-          Text('Total Price: 10000'),
+          Text('Unit Price: ${product.unitPrice}'),
+          Text('Quantity : ${product.quantity}'),
+          Text('Total Price: ${product.totalPrice}'),
         ],
       ),
       trailing: Wrap(

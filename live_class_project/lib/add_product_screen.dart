@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -13,7 +16,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController _quantityTEController = TextEditingController();
   final TextEditingController _totalPriceTEController = TextEditingController();
   final TextEditingController _imageTEController = TextEditingController();
+  final TextEditingController _productCodeTEController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool _addNewProductInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +56,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   validator: (String? value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Write your unit price';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _productCodeTEController,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                      hintText: 'Product Code', labelText: 'Product Code'),
+                  validator: (String? value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Write your product code';
                     }
                     return null;
                   },
@@ -92,18 +112,92 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
-                  },
-                  child: const Text('Add'),
-                )
+                // if (_addNewProductInProgress == true)
+                //   const Center(
+                //     child: CircularProgressIndicator(),
+                //   )
+                // else
+                //   ElevatedButton(
+                //     onPressed: () {
+                //       if (_formKey.currentState!.validate()) {
+                //         _addProduct();
+                //       }
+                //     },
+                //     child: const Text('Add'),
+                //   )
+
+                Visibility(
+                  visible: _addNewProductInProgress == false,
+                  replacement: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _addProduct();
+                      }
+                    },
+                    child: const Text('Add'),
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  // Future, async, await
+
+  Future<void> _addProduct() async {
+    _addNewProductInProgress = true;
+    setState(() {});
+    // Step 1: Set Url
+    const String addNewProductUrl =
+        'https://crud.teamrabbil.com/api/v1/CreateProduct';
+
+    // Step 2:  Prepare data
+    Map<String, dynamic> inputData = {
+      "Img": _imageTEController.text.trim(),
+      "ProductCode": _productCodeTEController.text,
+      "ProductName": _nameTEController.text,
+      "Qty": _quantityTEController.text,
+      "TotalPrice": _totalPriceTEController.text,
+      "UnitPrice": _unitPriceTEController.text
+    };
+
+    // URI -> Uniform Resource Identifier
+    // Step 3: Parse
+    Uri uri = Uri.parse(addNewProductUrl);
+    // Step 4: Send Request
+    Response response = await post(
+      uri,
+      body: jsonEncode(inputData),
+      headers: {'content-type': 'application/json'},
+    );
+    print(response.statusCode);
+    print(response.body);
+    print(response.headers);
+
+    _addNewProductInProgress = false;
+    setState(() {});
+
+    if (response.statusCode == 200) {
+      _nameTEController.clear();
+      _unitPriceTEController.clear();
+      _productCodeTEController.clear();
+      _quantityTEController.clear();
+      _totalPriceTEController.clear();
+      _imageTEController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('New product added!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Add new product failed! Try again.')),
+      );
+    }
   }
 
   @override

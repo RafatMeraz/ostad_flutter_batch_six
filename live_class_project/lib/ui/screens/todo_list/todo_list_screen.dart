@@ -15,7 +15,7 @@ class TodoListScreen extends StatefulWidget {
 class _TodoListScreenState extends State<TodoListScreen>
     with SingleTickerProviderStateMixin {
   // late TabController _tabController = TabController(length: 3, vsync: this);
-  List<Todo> _todoList = [];
+  final List<Todo> _todoList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +26,23 @@ class _TodoListScreenState extends State<TodoListScreen>
           title: const Text('Todo List'),
           bottom: _buildTabBar(),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
-            AllTodoListTab(),
-            UndoneTodoListTab(),
-            DoneTodoListTab(),
+            AllTodoListTab(
+              onDelete: _deleteTodo,
+              onStatusChange: _toggleTodoStatus,
+              todoList: _todoList,
+            ),
+            UndoneTodoListTab(
+              onDelete: _deleteTodo,
+              onStatusChange: _toggleTodoStatus,
+              todoList: _todoList.where((item) => item.isDone == false).toList(),
+            ),
+            DoneTodoListTab(
+              onDelete: _deleteTodo,
+              onStatusChange: _toggleTodoStatus,
+              todoList: _todoList.where((item) => item.isDone == true).toList(),
+            ),
           ],
         ),
         floatingActionButton: _buildAddTodoFAB(),
@@ -44,7 +56,9 @@ class _TodoListScreenState extends State<TodoListScreen>
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const AddNewTodoScreen()),
+          MaterialPageRoute(
+            builder: (context) => AddNewTodoScreen(onAddTodo: _addNewTodo),
+          ),
         );
       },
       label: const Text('Add'),
@@ -66,5 +80,26 @@ class _TodoListScreenState extends State<TodoListScreen>
         ),
       ],
     );
+  }
+
+  void _addNewTodo(Todo todo) {
+    _todoList.add(todo);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _deleteTodo(int index) {
+    _todoList.removeAt(index);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _toggleTodoStatus(int index) {
+    _todoList[index].isDone = !_todoList[index].isDone;
+    if (mounted) {
+      setState(() {});
+    }
   }
 }

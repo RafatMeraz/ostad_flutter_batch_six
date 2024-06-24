@@ -24,6 +24,7 @@ class AuthController {
   static Future<void> saveUserData(UserModel user) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString(_userDataKey, jsonEncode(user.toJson()));
+    userData = user;
   }
 
   static Future<UserModel?> getUserData() async {

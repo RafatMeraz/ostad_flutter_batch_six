@@ -20,6 +20,12 @@ class CounterController extends GetxController {
 
   int get count => _count;
 
+  @override
+  void onInit() {
+    super.onInit();
+    print('On init called');
+  }
+
   void incrementCount() {
     _count += 2;
     update();

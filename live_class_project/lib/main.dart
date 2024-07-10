@@ -11,21 +11,23 @@ class CounterApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(),
+    return GetMaterialApp(
+      home: const HomeScreen(),
+      initialBinding: ControllerBindings(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+class ControllerBindings extends Bindings {
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  void dependencies() {
+    // Get.lazyPut(() => CounterController());
+    Get.put(CounterController());
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final CounterController _counterController = Get.put(CounterController());
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +53,95 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            TextButton(
+              onPressed: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const ProfileScreen(),
+                //   ),
+                // );
+                Get.to(
+                  () => const ProfileScreen(
+                    name: 'Tamim',
+                  ),
+                );
+              },
+              child: const Text('Go to profile'),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.to(() => const SettingsScreen());
+              },
+              child: const Text('Go to Settings'),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _counterController.incrementCount,
+        onPressed: Get.find<CounterController>().incrementCount,
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class ProfileScreen extends StatelessWidget {
+  final String name;
+
+  const ProfileScreen({super.key, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
+      body: Column(
+        children: [
+          Text(name),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text('Back'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.off(() => const SettingsScreen());
+            },
+            child: const Text('Settings'),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Get.offAll(() => const HomeScreen());
+            },
+            child: const Text('Back to Home'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text('Back'),
+          )
+        ],
       ),
     );
   }

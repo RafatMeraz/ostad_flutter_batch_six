@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_class_project/ui/screens/todo_list/todo_list_screen.dart';
+import 'package:live_class_project/ui/screens/match_list_screen.dart';
 
 class TodoApp extends StatelessWidget {
   const TodoApp({super.key});
@@ -7,7 +7,7 @@ class TodoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const TodoListScreen(),
+      home: const MatchListScreen(),
       theme: _lightTheme(),
     );
   }

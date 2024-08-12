@@ -17,6 +17,7 @@ dependencies:
   lottie: ^3.1.2
   firebase_core: ^3.2.0
   cloud_firestore: ^5.1.0
+  firebase_messaging: ^15.0.4
 
 dev_dependencies:
   flutter_test:

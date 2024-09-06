@@ -1,7 +1,6 @@
-import 'package:crafty_bay/presentation/ui/screens/email_verification_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/home_screen.dart';
 import 'package:crafty_bay/presentation/ui/widgets/app_logo_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,7 +13,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   Future<void> _moveToNextScreen() async {
     await Future.delayed(const Duration(seconds: 2));
-    Get.off(() => const EmailVerificationScreen());
+    Get.off(() => const HomeScreen());
   }
 
   @override

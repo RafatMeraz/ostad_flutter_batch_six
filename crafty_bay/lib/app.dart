@@ -50,6 +50,14 @@ class _CraftyBayAppState extends State<CraftyBayApp> {
               foregroundColor: AppColors.themeColor,
               textStyle: const TextStyle(fontSize: 16)),
         ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          titleTextStyle: TextStyle(
+            color: Colors.black54,
+            fontSize: 20,
+            fontWeight: FontWeight.w500
+          )
+        )
       ),
     );
   }

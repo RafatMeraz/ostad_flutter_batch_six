@@ -1,6 +1,7 @@
 import 'package:crafty_bay/presentation/state_holders/bottom_nav_bar_controller.dart';
-import 'package:crafty_bay/presentation/state_holders/slider_list_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/category_list_controller.dart';
 import 'package:crafty_bay/presentation/ui/utils/assets_path.dart';
+import 'package:crafty_bay/presentation/ui/widgets/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,13 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  @override
-  void initState() {
-    super.initState();
-    Get.find<SliderListController>().getSliderList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,9 +89,18 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         const SizedBox(height: 8),
-        const SizedBox(
+        SizedBox(
           height: 120,
-          child: HorizontalCategoryListView(),
+          child: GetBuilder<CategoryListController>(
+              builder: (categoryListController) {
+            return Visibility(
+              visible: !categoryListController.inProgress,
+              replacement: const CenteredCircularProgressIndicator(),
+              child: HorizontalCategoryListView(
+                categoryList: categoryListController.categoryList,
+              ),
+            );
+          }),
         ),
       ],
     );

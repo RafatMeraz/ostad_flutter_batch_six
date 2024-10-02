@@ -18,7 +18,7 @@ class CategoryCard extends StatelessWidget {
       onTap: () {
         Get.to(
           () =>
-              ProductListScreen(categoryName: categoryModel.categoryName ?? ''),
+              ProductListScreen(category: categoryModel),
         );
       },
       child: Column(

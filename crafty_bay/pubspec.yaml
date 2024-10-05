@@ -18,6 +18,7 @@ dependencies:
   item_count_number_button: ^1.9.2
   http: ^1.2.2
   logger: ^2.4.0
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

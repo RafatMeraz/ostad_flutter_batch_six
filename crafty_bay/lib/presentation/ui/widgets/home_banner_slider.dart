@@ -57,43 +57,40 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
               decoration: BoxDecoration(
                 color: AppColors.themeColor,
                 borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: NetworkImage(slider.image ?? ''),
+                  fit: BoxFit.cover
+                ),
               ),
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  const Placeholder(
-                    fallbackWidth: 100,
-                    fallbackHeight: 100,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          slider.price ?? '',
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                        ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: 100,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: AppColors.themeColor,
-                            ),
-                            onPressed: () {},
-                            child: const Text('Buy now'),
-                          ),
-                        )
-                      ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      slider.price ?? '',
+                      textAlign: TextAlign.center,
+                      style:
+                          Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
                     ),
-                  )
-                ],
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 100,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: AppColors.themeColor,
+                        ),
+                        onPressed: () {},
+                        child: const Text('Buy now'),
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           },

@@ -3,7 +3,7 @@ import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utils/urls.dart';
 import 'package:get/get.dart';
 
-class OtpVerificationController extends GetxController {
+class AddToCartController extends GetxController {
   bool _inProgress = false;
 
   String? _errorMessage;
@@ -12,20 +12,20 @@ class OtpVerificationController extends GetxController {
 
   String? get errorMessage => _errorMessage;
 
-  String _accessToken = '';
-
-  String get accessToken => _accessToken;
-
-  Future<bool> verifyOtp(String email, String otp) async {
+  Future<bool> addToCart(
+      int productId, String color, String size, int quantity) async {
     bool isSuccess = false;
     _inProgress = true;
     update();
-    final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
-      url: Urls.verifyOtp(email, otp),
-    );
+    final NetworkResponse response =
+        await Get.find<NetworkCaller>().postRequest(url: Urls.addToCart, body: {
+      "product_id": productId,
+      "color": color,
+      "size": size,
+      "qty": quantity,
+    });
     if (response.isSuccess && response.responseData['msg'] == 'success') {
       _errorMessage = null;
-      _accessToken = response.responseData['data'];
       isSuccess = true;
     } else {
       _errorMessage = response.errorMessage;

@@ -4,6 +4,8 @@ class Urls {
   static const String dummyUrl = '$_baseUrl/login';
   static const String sliderListUrl = '$_baseUrl/ListProductSlider';
   static const String categoryListUrl = '$_baseUrl/CategoryList';
+  static const String readProfile = '$_baseUrl/ReadProfile';
+  static const String addToCart = '$_baseUrl/CreateCartList';
 
   static String productListByRemark(String remark) =>
       '$_baseUrl/ListProductByRemark/$remark';

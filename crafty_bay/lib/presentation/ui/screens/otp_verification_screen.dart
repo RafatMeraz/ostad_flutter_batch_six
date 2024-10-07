@@ -1,5 +1,7 @@
 import 'package:crafty_bay/presentation/state_holders/otp_verification_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/read_profile_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/complete_profile_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay/presentation/ui/utils/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/utils/snack_message.dart';
 import 'package:crafty_bay/presentation/ui/widgets/app_logo_widget.dart';
@@ -21,6 +23,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final TextEditingController _otpTEController = TextEditingController();
   final OtpVerificationController _otpVerificationController =
       Get.find<OtpVerificationController>();
+  final ReadProfileController _readProfileController =
+      Get.find<ReadProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +112,19 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     bool result = await _otpVerificationController.verifyOtp(
         widget.email, _otpTEController.text);
     if (result) {
-      Get.to(() => const CompleteProfileScreen());
+      final bool readProfileResult = await _readProfileController
+          .getProfileDetails(_otpVerificationController.accessToken);
+      if (readProfileResult) {
+        if (_readProfileController.isProfileCompleted) {
+          Get.offAll(() => const MainBottomNavScreen());
+        } else {
+          Get.to(() => const CompleteProfileScreen());
+        }
+      } else {
+        if (mounted) {
+          showSnackBarMessage(context, _readProfileController.errorMessage!);
+        }
+      }
     } else {
       if (mounted) {
         showSnackBarMessage(context, _otpVerificationController.errorMessage!);

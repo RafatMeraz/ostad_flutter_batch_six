@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
+import 'package:crafty_bay/presentation/ui/screens/email_verification_screen.dart';
+import 'package:get/get.dart' as getx;
 import 'package:logger/logger.dart';
 
 import 'package:crafty_bay/data/models/network_response.dart';
@@ -8,8 +10,9 @@ import 'package:logger/web.dart';
 
 class NetworkCaller {
   final Logger logger;
+  final AuthController authController;
 
-  NetworkCaller({required this.logger});
+  NetworkCaller({required this.logger, required this.authController});
 
   Future<NetworkResponse> getRequest({required String url, String? token}) async {
     try {
@@ -30,6 +33,9 @@ class NetworkCaller {
       } else {
         _responseLog(
             url, response.statusCode, response.body, response.headers, false);
+        if (response.statusCode == 401) {
+          _moveToLogin();
+        }
         return NetworkResponse(
           isSuccess: false,
           statusCode: response.statusCode,
@@ -71,6 +77,9 @@ class NetworkCaller {
       } else {
         _responseLog(
             url, response.statusCode, response.body, response.headers, false);
+        if (response.statusCode == 401) {
+          _moveToLogin();
+        }
         return NetworkResponse(
           isSuccess: false,
           statusCode: response.statusCode,
@@ -84,6 +93,11 @@ class NetworkCaller {
         errorMessage: e.toString(),
       );
     }
+  }
+
+  Future<void> _moveToLogin() async {
+    await authController.clearUserData();
+    getx.Get.to(() => const EmailVerificationScreen());
   }
 
   void _requestLog(String url, Map<String, dynamic> params,

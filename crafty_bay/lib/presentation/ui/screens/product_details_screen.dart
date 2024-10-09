@@ -63,6 +63,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Widget _buildProductDetails(ProductDetailsModel product) {
+    List<String> colors = product.color!.split(',');
+    List<String> sizes = product.size!.split(',');
+    _selectedColor = colors.first;
+    _selectedSize = sizes.first;
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -93,14 +98,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 //   onColorSelected: (color) {},
                 // ),
                 SizePicker(
-                  sizes: product.color!.split(','),
+                  sizes: colors,
                   onSizeSelected: (String selectedColor) {
                     _selectedColor = selectedColor;
                   },
                 ),
                 const SizedBox(height: 16),
                 SizePicker(
-                  sizes: product.size!.split(','),
+                  sizes: sizes,
                   onSizeSelected: (String selectedSize) {
                     _selectedSize = selectedSize;
                   },
@@ -150,6 +155,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           color: AppColors.themeColor,
           onChanged: (value) {
             quantity = value.toInt();
+            setState(() {});
           },
         ),
       ],

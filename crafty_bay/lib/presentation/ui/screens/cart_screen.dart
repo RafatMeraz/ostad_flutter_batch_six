@@ -1,4 +1,5 @@
 import 'package:crafty_bay/presentation/state_holders/bottom_nav_bar_controller.dart';
+import 'package:crafty_bay/presentation/ui/screens/payment_details_screen.dart';
 import 'package:crafty_bay/presentation/ui/utils/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/widgets/cart_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -73,10 +74,17 @@ class _CartScreenState extends State<CartScreen> {
           SizedBox(
               width: 140,
               child: ElevatedButton(
-                  onPressed: () {}, child: const Text('Checkout')))
+              onPressed: _onTapCheckOutButton,
+              child: const Text('Checkout'),
+            ),
+          )
         ],
       ),
     );
+  }
+
+  void _onTapCheckOutButton() {
+    Get.to(() => const PaymentDetailsScreen());
   }
 
   void backToHome() {

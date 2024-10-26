@@ -6,6 +6,7 @@ class Urls {
   static const String categoryListUrl = '$_baseUrl/CategoryList';
   static const String readProfile = '$_baseUrl/ReadProfile';
   static const String addToCart = '$_baseUrl/CreateCartList';
+  static const String createInvoice = '$_baseUrl/InvoiceCreate';
 
   static String productListByRemark(String remark) =>
       '$_baseUrl/ListProductByRemark/$remark';

@@ -1,4 +1,3 @@
-import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/bottom_nav_bar_controller.dart';
@@ -15,17 +14,21 @@ import 'package:crafty_bay/presentation/state_holders/slider_list_controller.dar
 import 'package:crafty_bay/presentation/state_holders/special_product_list_controller.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:network_caller/network_caller.dart';
 
 class ControllerBinder extends Bindings {
   @override
   void dependencies() {
     Get.put(BottomNavBarController());
     Get.put(Logger());
-    Get.put(AuthController());
     Get.put(NetworkCaller(
-      logger: Get.find<Logger>(),
-      authController: Get.find<AuthController>(),
+        logger: Get.find<Logger>(),
+        onTokenUnauthorize: () {
+          // TODO: clear all user data
+          // TODO: go to login screen
+        }
     ));
+    Get.put(AuthController(networkCaller: Get.find<NetworkCaller>()));
     Get.put(SliderListController());
     Get.put(CategoryListController());
     Get.put(NewProductListController());

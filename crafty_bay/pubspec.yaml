@@ -16,10 +16,13 @@ dependencies:
   pin_code_fields: ^8.0.1
   carousel_slider: ^5.0.0
   item_count_number_button: ^1.9.2
-  http: ^1.2.2
   logger: ^2.4.0
   shared_preferences: ^2.3.2
   webview_flutter: ^4.8.0
+
+dependency_overrides:
+  network_caller:
+    path: ../network_caller
 
 dev_dependencies:
   flutter_test:

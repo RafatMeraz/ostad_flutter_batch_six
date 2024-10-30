@@ -19,8 +19,6 @@ dependencies:
   logger: ^2.4.0
   shared_preferences: ^2.3.2
   webview_flutter: ^4.8.0
-
-dependency_overrides:
   network_caller:
     path: ../network_caller
 
